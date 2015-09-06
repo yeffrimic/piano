@@ -1,0 +1,48 @@
+/* utilizando el dedo indice de la mano izquierda se puede controlar una secuencia de luces leds 
+utilizando una teensy LC LEDS seriales WS2812B, libreria FastLed*/
+import de.voidplus.leapmotion.*;
+import processing.serial.*;
+LeapMotion leap;
+Serial teensy;
+int coordenadaX[] = new int[8];
+int tamanoX;
+PVector posicion;
+void setup() {
+  posicion = new PVector(40, 20);
+  leap = new LeapMotion(this);
+  size(1000, 400);
+  teensy = new Serial (this, "COM13", 9600);
+  tamanoX = (width-60)/7;
+  int x=0;
+  for (int i =0; i<7; i++) {
+    coordenadaX[i]=x;
+    x+=tamanoX;
+  }
+}
+
+void draw() {
+  background(124);
+  for (Hand hand : leap.getHands()) {
+    if (hand.isLeft()) {
+      for (Finger finger : hand.getFingers()) {
+        if (finger.getType()==1) {
+          posicion = finger.getPosition();
+        }
+      }
+    }
+  }
+  for (int i =0; i<7; i++) {
+    if (posicion.x>coordenadaX[i] && posicion.x<coordenadaX[i]+tamanoX && posicion.x<width-60) {
+      fill(0);
+      teensy.write(i+1);
+      println("enviendo"+i+1);
+    } else {
+      fill(255);
+    }
+    rect(coordenadaX[i], 0, tamanoX, height);
+  }
+  if (teensy.available()>0) {
+    println(teensy.read());
+  }
+  ellipse(posicion.x,posicion.y,30,30);
+}
