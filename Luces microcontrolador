@@ -2,15 +2,15 @@
 utilizamos una teensy LC la libreria fastled y los leds seriales WS2812B y la comunicacion serial.
 */
 
-#include "FastLED.h"
+#include "FastLED.h" // incluimos la libreria fastled
 
-#define NUM_LEDS 12
-
-
-#define DATA_PIN 11
+#define NUM_LEDS 12 // definimos el numero de leds que vamos a utilizar
 
 
-CRGB leds[NUM_LEDS];
+#define DATA_PIN 11 // definimos el pin de datos 
+
+
+CRGB leds[NUM_LEDS]; // variable CRGB de la libreria FastLED
 int e;
 
 void setup() {
